@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>养老金预测 · 北京（退休Z实指数）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f7fb; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; padding: 1.5rem; }
+        .calculator { max-width: 1100px; width: 100%; background: white; border-radius: 2rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        h1 { font-size: 1.8rem; font-weight: 600; color: #0a2540; display: flex; align-items: center; gap: 0.5rem; }
+        h1 span { background: #e8f0fe; color: #1a5bdb; font-size: 0.9rem; padding: 0.25rem 0.9rem; border-radius: 2rem; }
+        .subtitle { color: #5b6e8c; margin: 0.5rem 0 1.8rem; border-left: 4px solid #1a5bdb; padding-left: 1rem; }
+        .section-box { background: #f8faff; border: 1px solid #eef3fa; border-radius: 1.2rem; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .section-title { font-weight: 600; font-size: 1.1rem; color: #0a2540; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+        @media (max-width: 650px) { .form-grid { grid-template-columns: 1fr; } }
+        .field { display: flex; flex-direction: column; gap: 0.3rem; }
+        .field label { font-size: 0.85rem; font-weight: 600; color: #1f2b3d; }
+        .field input, .field select { padding: 0.7rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.95rem; background: white; }
+        .field input:focus, .field select:focus { border-color: #1a5bdb; outline: none; box-shadow: 0 0 0 4px rgba(26,91,219,0.08); }
+        .field input[readonly] { background: #f1f5f9; }
+        .auto-badge { font-size: 0.7rem; background: #dcfce7; color: #166534; padding: 0.15rem 0.5rem; border-radius: 1rem; margin-left: 0.3rem; }
+        .btn { background: linear-gradient(135deg, #153e6b, #0a2540); border: none; color: white; font-weight: 600; font-size: 1rem; padding: 0.8rem 1.8rem; border-radius: 1.2rem; cursor: pointer; }
+        .btn-secondary { background: #e8f0fe; border: 1.5px solid #1a5bdb; color: #1a5bdb; padding: 0.6rem 1.2rem; border-radius: 1rem; cursor: pointer; font-weight: 600; }
+        .btn-small { background: #1a5bdb; border: none; color: white; padding: 0.4rem 1rem; border-radius: 0.8rem; cursor: pointer; margin-left: 0.5rem; }
+        .btn-optimize { background: #16a34a; border: none; color: white; padding: 0.6rem 1.5rem; border-radius: 1rem; font-weight: 600; cursor: pointer; }
+        .result-card { background: #f8faff; border-radius: 1.5rem; padding: 1.6rem; border: 1px solid #eef3fa; margin-top: 1rem; }
+        .result-item { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed #e2e8f0; }
+        .highlight { font-size: 2rem; font-weight: 700; color: #0047ab; background: #e8f0fe; padding: 0.2rem 1rem; border-radius: 2rem; }
+        .section-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 1rem; }
+        th, td { border: 1px solid #d1d9e6; padding: 0.4rem; text-align: center; }
+        th { background: #f0f4fc; font-weight: 600; }
+        td input { width: 70px; padding: 0.3rem; border: 1px solid #ccd8e8; border-radius: 0.5rem; text-align: center; }
+        .note { margin-top: 0.5rem; font-size: 0.78rem; color: #475569; }
+        .irr-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 1rem; padding: 1rem; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+<div class="calculator">
+    <h1>📊 养老金预测 <span>北京·退休Z实指数</span></h1>
+    <div class="subtitle">现状指数固定 · 退休指数自动合成 · 精简表格</div>
+
+    <div class="section-box">
+        <div class="section-title">📋 现状基本情况</div>
+        <div class="form-grid">
+            <div class="field"><label>🎂 出生日期</label><input type="date" id="birthDate" value="1991-07-25"></div>
+            <div class="field"><label>⚧ 性别/身份</label>
+                <select id="genderType"><option value="male">男性 (原60岁)</option><option value="femaleCadre">女干部/灵活就业 (原55岁)</option><option value="femaleWorker" selected>女工人 (原50岁)</option></select>
+            </div>
+            <div class="field"><label>💼 参加工作时间</label><input type="date" id="startWorkDate" value="2014-08-01"></div>
+            <div class="field"><label>📈 上一年社平工资(年总额)</label><input type="number" id="currentSocialAvg" value="143244"></div>
+            <div class="field"><label>💰 当前个人账户储存额</label><input type="number" id="currentAccount" value="112623.53"></div>
+            <div class="field"><label>📊 现状平均缴费指数 (Z实指数) <span style="font-size:0.7rem; color:#64748b;">(截至当前)</span></label>
+                <div style="display:flex; gap:0.5rem;">
+                    <input type="number" id="avgIndex" value="1.0" step="0.01" style="flex:1;">
+                    <button type="button" id="showZTableBtn" class="btn-secondary">📋 详细计算</button>
+                </div>
+            </div>
+            <div class="field"><label>🧾 历史已自费缴纳社保总额 (元)</label><input type="number" id="totalHistoryPaid" value="0" step="0.01"></div>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-title">🔮 未来预测参数</div>
+        <div class="form-grid">
+            <div class="field"><label>🧓 预计退休日期 <span class="auto-badge">自动</span></label><input type="date" id="retireDate" readonly></div>
+            <div class="field"><label>📌 退休年龄 <span class="auto-badge">自动</span></label><input type="text" id="retireAgeDisplay" readonly></div>
+            <div class="field"><label>📊 退休时预计社平(年缴存额) <span class="auto-badge">自动</span></label><input type="text" id="predictedSocialAvg" readonly class="predicted-highlight"></div>
+            <div class="field"><label>🌱 社平工资年增长率 (%)</label><input type="number" id="wageGrowth" value="2.0"></div>
+            <div class="field"><label>📈 个人账户记账利率 (%)</label><input type="number" id="interestRate" value="1.8"></div>
+            <div class="field"><label>⚙️ 全局未来缴费档位</label><input type="number" id="futureRatio" value="0.6" step="0.1"></div>
+            <div class="field"><label>🎯 预期寿命 (岁)</label><input type="number" id="lifeExpectancy" value="80" step="1"></div>
+        </div>
+    </div>
+
+    <button class="btn" id="calculateBtn" style="width:100%;">🔍 全面计算（含IRR）</button>
+
+    <div id="resultContainer" class="result-card" style="display: none;"></div>
+
+    <div id="zIndexSection" style="margin-top: 2rem; display: none;">
+        <div class="section-bar">
+            <h3>📋 Z实指数详细计算（截至当前）</h3>
+            <button id="toggleZTableBtn" class="btn-small">收起表格</button>
+        </div>
+        <div id="zTableWrapper">
+            <table id="zIndexTable"><thead><tr><th>年份</th><th>上一年社平(年总额)</th><th>应缴月数</th><th>实缴月数</th><th>年缴费基数</th><th>指数</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div style="margin-top:0.8rem;">现状平均缴费指数 = <span id="computedZIndex">0.0000</span> <button id="applyZIndexBtn" class="btn-small">✅ 采用</button></div>
+    </div>
+
+    <div id="futureSection" style="margin-top:2rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+            <h3 style="margin:0;">📈 未来社保缴费收益预测（可编辑档位）</h3>
+            <button id="optimizeBtn" class="btn-optimize">🔍 规律性推荐最优档位</button>
+        </div>
+        <table id="futureTable">
+            <thead><tr><th>年份</th><th>预测上一年社平</th><th>月数</th><th>档位</th><th>年缴存基数</th><th>灵活就业缴费</th><th>年末账户余额</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <div class="note">
+            * 灵活就业缴费 = 养老金(按基数20%缴纳，其中8%进入个人账户) + 失业金(按基数1%缴纳) + 医疗保险(固定值，每年按2%增长)。<br>
+            * 退休当年各项缴费及账户划入均按实际退休月数比例折算。
+        </div>
+        <button id="resetRatiosBtn" class="btn-secondary" style="margin-top:0.5rem;">🔄 重置所有档位为全局值</button>
+    </div>
+
+    <div class="note" style="margin-top:1.5rem;">
+        ⚠️ 现状Z实指数仅基于历史数据，不随未来档位变化。退休时Z实指数由历史指数与未来档位综合计算。
+    </div>
+</div>
+
+<script>
+    (() => {
+        const pmap = {40:233,41:230,42:226,43:223,44:220,45:216,46:212,47:208,48:204,49:199,50:195,51:190,52:185,53:180,54:175,55:170,56:164,57:158,58:152,59:145,60:139,61:132,62:125,63:117,64:109,65:101,66:93,67:84,68:75,69:65,70:56};
+        const getPayout = age => {
+            const f = Math.floor(age);
+            if (f<=40) return 233; if (f>=70) return 56;
+            if (pmap[f] && f===age) return pmap[f];
+            const l = pmap[f] || 233, u = pmap[Math.ceil(age)] || 56;
+            return Math.round(l + (u-l)*(age-f));
+        };
+
+        const delayRetire = (birth, gender) => {
+            let orig, step, target;
+            if (gender==='male') { orig=60; step=4; target=63; }
+            else if (gender==='femaleCadre') { orig=55; step=4; target=58; }
+            else { orig=50; step=2; target=55; }
+            const origDate = new Date(birth.getFullYear()+orig, birth.getMonth(), 1);
+            if (origDate < new Date(2025,0,1)) return { date: origDate, age: orig };
+            let diff = (origDate.getFullYear()-2025)*12 + origDate.getMonth();
+            let delay = Math.floor(Math.max(0,diff)/step);
+            delay = Math.min(delay, (target-orig)*12);
+            const newDate = new Date(origDate);
+            newDate.setMonth(newDate.getMonth()+delay);
+            return { date: newDate, age: (newDate - birth)/(365.25*86400000) };
+        };
+
+        const socialHist = {1992:2877,1993:3402,1994:4523,1995:6540,1996:8144,1997:9579,1998:11019,1999:12285,2000:13778,2001:15726,2002:18092,2003:20728,2004:24045,2005:28348,2006:32808,2007:36097,2008:39867,2009:44715,2010:48444,2011:50415,2012:56061,2013:62677,2014:69521,2015:77560,2016:85038,2017:92477,2018:101599,2019:94258,2020:106168,2021:112668,2022:127535,2023:135567,2024:141133,2025:143244};
+        const getPrevSocial = y => y <= 2025 && socialHist[y] ? socialHist[y] : (socialHist[2025]||143244) * Math.pow(1 + (parseFloat(document.getElementById('wageGrowth').value)||2)/100, y-2025);
+
+        const fmtDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const money = v => v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+
+        const els = {
+            birth: document.getElementById('birthDate'),
+            gender: document.getElementById('genderType'),
+            retireDate: document.getElementById('retireDate'),
+            retireAge: document.getElementById('retireAgeDisplay'),
+            curSocial: document.getElementById('currentSocialAvg'),
+            wageGrowth: document.getElementById('wageGrowth'),
+            predicted: document.getElementById('predictedSocialAvg'),
+            avgIndex: document.getElementById('avgIndex'),
+            curAccount: document.getElementById('currentAccount'),
+            interest: document.getElementById('interestRate'),
+            ratio: document.getElementById('futureRatio'),
+            historyPaid: document.getElementById('totalHistoryPaid'),
+            lifeExp: document.getElementById('lifeExpectancy'),
+            result: document.getElementById('resultContainer'),
+            zSection: document.getElementById('zIndexSection'),
+            zWrapper: document.getElementById('zTableWrapper'),
+            zBody: document.querySelector('#zIndexTable tbody'),
+            zResult: document.getElementById('computedZIndex'),
+            futureBody: document.querySelector('#futureTable tbody')
+        };
+
+        const updatePred = () => {
+            if (!els.retireDate.value) { els.predicted.value='——'; return; }
+            const prev = new Date(els.retireDate.value).getFullYear() - 1;
+            els.predicted.value = money(getPrevSocial(prev)) + ' 元/年';
+        };
+        const updateRetire = () => {
+            if (!els.birth.value) return;
+            const r = delayRetire(new Date(els.birth.value), els.gender.value);
+            els.retireDate.value = fmtDate(r.date);
+            els.retireAge.value = r.age.toFixed(1)+' 岁';
+            updatePred();
+        };
+        els.birth.addEventListener('change', updateRetire);
+        els.gender.addEventListener('change', updateRetire);
+        els.curSocial.addEventListener('input', updatePred);
+        els.wageGrowth.addEventListener('input', updatePred);
+        els.retireDate.addEventListener('dblclick', function(){ this.removeAttribute('readonly'); });
+        els.retireDate.addEventListener('blur', function(){
+            if (this.value && els.birth.value) {
+                const age = (new Date(this.value)-new Date(els.birth.value))/(365.25*86400000);
+                els.retireAge.value = age.toFixed(1)+' 岁 (手动)';
+                updatePred();
+            }
+            this.setAttribute('readonly', true);
+        });
+
+        const getHistoricalYearCount = () => {
+            const start = new Date(document.getElementById('startWorkDate').value);
+            return new Date().getFullYear() - start.getFullYear();
+        };
+
+        const computeWithRatios = (ratios) => {
+            const birth = new Date(els.birth.value);
+            const start = new Date(document.getElementById('startWorkDate').value);
+            const retire = new Date(els.retireDate.value);
+            const curAccount = parseFloat(els.curAccount.value)||0;
+            const wg = parseFloat(els.wageGrowth.value)||2;
+            const ir = parseFloat(els.interest.value)||1.8;
+            const historyPaid = parseFloat(els.historyPaid.value)||0;
+            const lifeExp = parseFloat(els.lifeExp.value)||80;
+
+            const curYear = new Date().getFullYear();
+            const retYear = retire.getFullYear();
+            const retMonth = retire.getMonth()+1;
+
+            const fixedAvgIndex = parseFloat(els.avgIndex.value) || 1.0;
+            const histYears = getHistoricalYearCount();
+            const futureYears = ratios.length;
+            const totalYears = histYears + futureYears;
+            const futureIndexSum = ratios.reduce((a,b)=>a+b,0);
+            const retireZIndex = (fixedAvgIndex * histYears + futureIndexSum) / totalYears;
+
+            const retPrevSocial = getPrevSocial(retYear-1);
+            const retPrevMonth = retPrevSocial/12;
+            const basePension = (retPrevMonth + retPrevMonth * retireZIndex) / 2 * totalYears * 0.01;
+
+            let balance = curAccount;
+            const irRate = ir/100;
+            const futureRows = [];
+            let totalFlex = 0;
+
+            for (let i = 0; i < ratios.length; i++) {
+                const y = curYear + i;
+                const ratio = ratios[i];
+                const prevSocial = getPrevSocial(y);
+                const months = (y === retYear) ? retMonth : 12;
+                const monthBase = (prevSocial/12) * ratio;
+                const annualBase = prevSocial * ratio;
+                const pensionY = annualBase * 0.20 * (months/12);
+                const unempY = annualBase * 0.01 * (months/12);
+                const medY = (584.92*12) * Math.pow(1.02, y-2025) * (months/12);
+                const flex = pensionY + unempY + medY;
+                balance = balance * (1 + irRate) + monthBase * 0.08 * months;
+                totalFlex += flex;
+                futureRows.push({ y, prevSocial, months, ratio, annualBase, flex, balance, pensionY, unempY, medY });
+            }
+
+            const finalBalance = balance;
+            const retireAge = (retire - birth)/(365.25*86400000);
+            const monthsPay = getPayout(retireAge);
+            const personalPen = finalBalance / monthsPay;
+            const totalMonthly = basePension + personalPen;
+
+            const histAnnual = histYears > 0 ? historyPaid / histYears : 0;
+            const futureMap = Object.fromEntries(futureRows.map(r => [r.y, r.flex]));
+            const endYear = birth.getFullYear() + Math.floor(lifeExp);
+            const flows = [];
+            for (let y = start.getFullYear(); y <= endYear; y++) {
+                let cf = 0;
+                if (y < curYear) cf -= histAnnual;
+                else if (futureMap.hasOwnProperty(y)) cf -= futureMap[y];
+                if (y >= retYear) {
+                    const months = (y === retYear) ? (12 - retMonth) : 12;
+                    cf += totalMonthly * months;
+                }
+                flows.push(cf);
+            }
+
+            let irrVal = null;
+            const npv = r => flows.reduce((s, cf, t) => s + cf / Math.pow(1+r, t), 0);
+            if (flows.some(cf => cf>0) && flows.some(cf => cf<0)) {
+                let low = -0.99, high = 10;
+                if (npv(low) * npv(high) <= 0) {
+                    for (let iter=0; iter<200; iter++) {
+                        const mid = (low+high)/2;
+                        const n = npv(mid);
+                        if (Math.abs(n) < 1e-6) { irrVal = mid; break; }
+                        if (npv(low)*n < 0) high = mid; else low = mid;
+                    }
+                    if (irrVal === null) irrVal = (low+high)/2;
+                }
+            }
+
+            return { totalMonthly, basePension, personalPen, finalBalance, futureRows, irr: irrVal, flows, retireZIndex };
+        };
+
+        const calculateAll = () => {
+            const curYear = new Date().getFullYear();
+            const retYear = new Date(els.retireDate.value).getFullYear();
+            const years = [];
+            for (let y = curYear; y <= retYear; y++) years.push(y);
+            const ratios = years.map(y => {
+                const inp = document.querySelector(`#futureTable input.ratio-input[data-year="${y}"]`);
+                const val = inp ? parseFloat(inp.value) : parseFloat(els.ratio.value)||0.6;
+                return isNaN(val) ? 0.6 : val;
+            });
+
+            const res = computeWithRatios(ratios);
+            if (!res) return;
+
+            const retire = new Date(els.retireDate.value);
+            const birth = new Date(els.birth.value);
+            const retireAge = (retire - birth)/(365.25*86400000);
+            const lifeExp = parseFloat(els.lifeExp.value)||80;
+            const historyPaid = parseFloat(els.historyPaid.value)||0;
+            const totalFlex = res.futureRows.reduce((s,r)=>s+r.flex,0);
+            const simplePayback = (historyPaid + totalFlex) / (res.totalMonthly * 12);
+            const irrStr = res.irr !== null ? (res.irr*100).toFixed(2)+'%' : '无法计算';
+
+            els.result.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                    <span>📅 退休时间</span><span style="background:#e6edf8; padding:0.3rem 1rem; border-radius:1.5rem;">${retire.getFullYear()}年${retire.getMonth()+1}月</span>
+                </div>
+                <div class="result-item"><span>📌 预计每月养老金</span><span class="highlight">${money(res.totalMonthly)} 元</span></div>
+                <div class="result-item"><span>├ 基础养老金</span><span>${money(res.basePension)} 元</span></div>
+                <div class="result-item"><span>└ 个人账户养老金</span><span>${money(res.personalPen)} 元</span></div>
+                <div class="result-item"><span>📈 退休上年度社平月工资</span><span>${money(getPrevSocial(retire.getFullYear()-1)/12)} 元</span></div>
+                <div class="result-item"><span>📊 现状平均缴费指数 (Z实指数)</span><span>${(parseFloat(els.avgIndex.value)||1).toFixed(4)}</span></div>
+                <div class="result-item"><span>📊 退休时平均缴费指数 (Z实指数)</span><span>${res.retireZIndex.toFixed(4)}</span></div>
+                <div class="result-item"><span>📆 全部缴费年限</span><span>${(getHistoricalYearCount() + res.futureRows.length).toFixed(1)} 年</span></div>
+                <div class="result-item"><span>💰 退休时个人账户余额</span><span>${money(res.finalBalance)} 元</span></div>
+                <div class="result-item"><span>🧮 计发月数</span><span>${getPayout(retireAge)} 个月</span></div>
+                <div class="irr-box">
+                    <div class="result-item"><span>🎯 预期寿命</span><span>${lifeExp} 岁</span></div>
+                    <div class="result-item"><span>📆 领取年限</span><span>${Math.max(0, lifeExp - retireAge).toFixed(1)} 年</span></div>
+                    <div class="result-item"><span>💵 领取总金额</span><span>${money(res.totalMonthly*12*Math.max(0,lifeExp-retireAge))} 元</span></div>
+                    <div class="result-item"><span>⏳ 简单回本周期</span><span>${simplePayback.toFixed(2)} 年</span></div>
+                    <div class="result-item"><span>📊 内部收益率 (IRR)</span><span style="font-weight:700;">${irrStr}</span></div>
+                </div>`;
+            els.result.style.display = 'block';
+
+            renderFutureTable(res.futureRows);
+        };
+
+        const renderFutureTable = (rows) => {
+            let html = '';
+            rows.forEach(r => {
+                html += `<tr>
+                    <td>${r.y}</td><td>${money(r.prevSocial)}</td><td>${r.months}</td>
+                    <td><input class="ratio-input" data-year="${r.y}" value="${r.ratio.toFixed(1)}" step="0.1" min="0.6" max="3.0" type="number"></td>
+                    <td>${money(r.annualBase)}</td><td>${money(r.flex)}</td>
+                    <td>${money(r.balance)}</td></tr>`;
+            });
+            html += `<tr style="font-weight:700; background:#f0f4fc;">
+                <td colspan="5">合计</td><td>${money(rows.reduce((s,r)=>s+r.flex,0))}</td>
+                <td>${money(rows[rows.length-1].balance)}</td></tr>`;
+            els.futureBody.innerHTML = html;
+            document.querySelectorAll('#futureTable input.ratio-input').forEach(inp => {
+                inp.addEventListener('change', () => calculateAll());
+            });
+        };
+
+        document.getElementById('calculateBtn').addEventListener('click', calculateAll);
+        document.getElementById('resetRatiosBtn').addEventListener('click', () => {
+            const g = parseFloat(els.ratio.value)||0.6;
+            document.querySelectorAll('#futureTable input.ratio-input').forEach(i => i.value = g.toFixed(1));
+            calculateAll();
+        });
+
+        document.getElementById('optimizeBtn').addEventListener('click', () => {
+            const curYear = new Date().getFullYear();
+            const retYear = new Date(els.retireDate.value).getFullYear();
+            const n = retYear - curYear + 1;
+            if (n<=0) return;
+            const candidates = [];
+            for (let direction of ['descending','ascending']) {
+                for (let split=0; split<n; split++) {
+                    for (let r1=0.6; r1<=3.0; r1=Math.round((r1+0.3)*10)/10) {
+                        for (let r2=0.6; r2<=3.0; r2=Math.round((r2+0.3)*10)/10) {
+                            if (direction==='descending' && r1<r2) continue;
+                            if (direction==='ascending' && r1>r2) continue;
+                            const ratios = [];
+                            for (let i=0; i<n; i++) ratios.push(i<=split ? r1 : r2);
+                            const res = computeWithRatios(ratios);
+                            if (res.irr !== null) candidates.push({ ratios, irr: res.irr });
+                        }
+                    }
+                }
+            }
+            if (candidates.length) {
+                const best = candidates.reduce((a,b)=>a.irr>b.irr?a:b);
+                for (let i=0; i<n; i++) {
+                    const inp = document.querySelector(`#futureTable input.ratio-input[data-year="${curYear+i}"]`);
+                    if (inp) inp.value = best.ratios[i].toFixed(1);
+                }
+                calculateAll();
+                alert(`已推荐最优规律档位，预期IRR约 ${(best.irr*100).toFixed(2)}%`);
+            } else alert('未找到有效IRR组合');
+        });
+
+        // Z实指数表逻辑
+        const renderZTable = () => {
+            const start = new Date(document.getElementById('startWorkDate').value);
+            if (!start) return;
+            const sy = start.getFullYear(), sm = start.getMonth()+1;
+            const now = new Date(); const cy = now.getFullYear(), cm = now.getMonth()+1;
+            let html = '';
+            for (let y=sy; y<=cy; y++) {
+                const prev = socialHist[y-1]; if (!prev) continue;
+                let due = 12;
+                if (y===sy && y===cy) due = cm - sm + 1;
+                else if (y===sy) due = 12 - sm + 1;
+                else if (y===cy) due = cm;
+                if (due<=0) continue;
+                html += `<tr data-year="${y}"><td>${y}</td><td>${prev.toLocaleString()}</td><td>${due}</td>
+                    <td><input class="act" value="${due}"></td><td><input class="base" value="${prev}"></td><td class="idx">0.0000</td></tr>`;
+            }
+            els.zBody.innerHTML = html;
+            document.querySelectorAll('#zIndexTable input').forEach(i => i.addEventListener('input', updateZ));
+            updateZ();
+            els.zSection.style.display = 'block';
+            els.zWrapper.style.display = 'block';
+            document.getElementById('toggleZTableBtn').textContent = '收起表格';
+        };
+        const updateZ = () => {
+            let sum=0, cnt=0;
+            document.querySelectorAll('#zIndexTable tbody tr').forEach(r => {
+                const y = parseInt(r.dataset.year);
+                const prev = socialHist[y-1]||1;
+                const act = parseFloat(r.querySelector('.act').value)||0;
+                const base = parseFloat(r.querySelector('.base').value)||0;
+                const idx = act>0? base/prev : 0;
+                r.querySelector('.idx').textContent = idx.toFixed(4);
+                if (act>0) { sum+=idx; cnt++; }
+            });
+            els.zResult.textContent = cnt ? (sum/cnt).toFixed(4) : '0.0000';
+        };
+        document.getElementById('showZTableBtn').addEventListener('click', renderZTable);
+        document.getElementById('toggleZTableBtn').addEventListener('click', ()=>{
+            const vis = els.zWrapper.style.display === 'none';
+            els.zWrapper.style.display = vis ? 'block' : 'none';
+            document.getElementById('toggleZTableBtn').textContent = vis ? '收起表格' : '展开表格';
+        });
+        document.getElementById('applyZIndexBtn').addEventListener('click', ()=>{
+            const v = parseFloat(els.zResult.textContent);
+            if (!isNaN(v)) { els.avgIndex.value = v.toFixed(4); alert('已采用 '+v.toFixed(4)); }
+        });
+
+        window.addEventListener('DOMContentLoaded', ()=>{
+            updateRetire();
+            renderZTable();
+            calculateAll();
+        });
+    })();
+</script>
+</body>
+</html>
