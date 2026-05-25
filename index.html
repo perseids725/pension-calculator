@@ -3,105 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>养老金预测 · 北京（设备指纹激活）</title>
+    <title>养老金预测 · 北京（完整稳定版）</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f5f7fb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: flex-start; padding: 1rem; min-height: 100vh; }
-        .app-container { display: flex; max-width: 1100px; width: 100%; background: white; border-radius: 1.5rem; box-shadow: 0 15px 40px rgba(0,0,0,0.08); overflow: hidden; min-height: 90vh; }
-        .steps-nav { width: 220px; background: #f0f4fc; padding: 2rem 1rem; display: flex; flex-direction: column; align-items: center; gap: 1.8rem; border-right: 1px solid #dce3f0; }
-        @media (max-width: 700px) { .steps-nav { flex-direction: row; width: 100%; justify-content: center; padding: 0.8rem; gap: 1rem; border-right: none; border-bottom: 1px solid #dce3f0; } }
-        .step-item { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        body { background: #f5f7fb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: flex-start; padding: 0.5rem; min-height: 100vh; }
+        .app-container { display: flex; max-width: 1100px; width: 100%; background: white; border-radius: 1.2rem; box-shadow: 0 15px 40px rgba(0,0,0,0.08); overflow: hidden; min-height: 95vh; }
+        .steps-nav { width: 220px; background: #f0f4fc; padding: 1.5rem 1rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; border-right: 1px solid #dce3f0; flex-shrink: 0; }
+        @media (max-width: 700px) { .steps-nav { flex-direction: row; width: 100%; justify-content: center; padding: 0.6rem; gap: 0.8rem; border-right: none; border-bottom: 1px solid #dce3f0; overflow-x: auto; } }
+        .step-item { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; cursor: pointer; opacity: 0.5; transition: 0.2s; }
         .step-item.active { opacity: 1; }
         .step-circle { width: 40px; height: 40px; border-radius: 50%; background: #cbd5e1; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; }
         .step-item.active .step-circle { background: #1a5bdb; }
-        .step-label { font-size: 0.8rem; font-weight: 600; color: #334155; text-align: center; }
-        .content-area { flex: 1; padding: 1.5rem 2rem; display: flex; flex-direction: column; }
+        .step-label { font-size: 0.75rem; font-weight: 600; color: #334155; text-align: center; }
+        .content-area { flex: 1; padding: 1.2rem; display: flex; flex-direction: column; overflow-y: auto; }
         .step-content { display: none; flex: 1; flex-direction: column; }
         .step-content.active { display: flex; }
-        .step-title { font-size: 1.3rem; font-weight: 700; color: #0a2540; margin-bottom: 1rem; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem 1.5rem; }
+        .step-title { font-size: 1.2rem; font-weight: 700; color: #0a2540; margin-bottom: 0.8rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1rem; }
         @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
         .field { display: flex; flex-direction: column; gap: 0.2rem; }
-        .field label { font-size: 0.85rem; font-weight: 600; color: #1f2b3d; }
-        .field input, .field select { padding: 0.6rem 0.8rem; border: 1.5px solid #e2e8f0; border-radius: 0.7rem; font-size: 0.9rem; background: white; width: 100%; }
+        .field label { font-size: 0.8rem; font-weight: 600; color: #1f2b3d; }
+        .field input, .field select { padding: 0.6rem 0.7rem; border: 1.5px solid #e2e8f0; border-radius: 0.6rem; font-size: 0.9rem; background: white; width: 100%; }
         .field input:focus, .field select:focus { border-color: #1a5bdb; outline: none; }
         .field input[readonly] { background: #f1f5f9; color: #334155; }
-        .btn { background: linear-gradient(135deg, #153e6b, #0a2540); border: none; color: white; font-weight: 600; padding: 0.7rem 1.5rem; border-radius: 0.8rem; cursor: pointer; }
-        .btn-secondary { background: #e8f0fe; border: 1.5px solid #1a5bdb; color: #1a5bdb; padding: 0.5rem 1rem; border-radius: 0.7rem; cursor: pointer; font-size: 0.85rem; }
-        .btn-small { background: #1a5bdb; border: none; color: white; padding: 0.3rem 0.8rem; border-radius: 0.6rem; cursor: pointer; font-size: 0.8rem; }
-        .nav-buttons { display: flex; justify-content: space-between; margin-top: 1.5rem; gap: 1rem; }
+        .btn { background: linear-gradient(135deg, #153e6b, #0a2540); border: none; color: white; font-weight: 600; padding: 0.7rem 1.2rem; border-radius: 0.7rem; cursor: pointer; }
+        .btn-secondary { background: #e8f0fe; border: 1.5px solid #1a5bdb; color: #1a5bdb; padding: 0.5rem 1rem; border-radius: 0.6rem; cursor: pointer; font-size: 0.8rem; }
+        .btn-small { background: #1a5bdb; border: none; color: white; padding: 0.3rem 0.7rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8rem; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 1rem; gap: 0.8rem; }
         .nav-buttons button { flex: 1; }
-        .table-wrapper { overflow-x: auto; margin-top: 0.8rem; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; min-width: 700px; }
-        th, td { border: 1px solid #d1d9e6; padding: 0.35rem; text-align: center; }
+        .table-wrapper { overflow-x: auto; margin-top: 0.6rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 650px; }
+        th, td { border: 1px solid #d1d9e6; padding: 0.3rem; text-align: center; }
         th { background: #f0f4fc; font-weight: 600; }
-        td input { width: 60px; padding: 0.2rem; text-align: center; border: 1px solid #ccd8e8; border-radius: 0.3rem; }
-        .note { font-size: 0.75rem; color: #475569; margin-top: 0.4rem; }
-        .irr-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.8rem; }
-        .result-item { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px dashed #e2e8f0; }
-        .highlight { font-size: 1.5rem; font-weight: 700; color: #0047ab; background: #e8f0fe; padding: 0.1rem 0.6rem; border-radius: 1rem; }
-        .strategy-note { background: #fefce8; border: 1px solid #fde047; padding: 0.5rem; margin-top: 0.5rem; border-radius: 0.5rem; font-size: 0.75rem; }
-        .activation-box { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 0.8rem; padding: 1rem; margin-top: 1rem; }
-        .profile-header {
-            display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem 0; margin-bottom: 1.2rem;
-            border-bottom: 1px solid #e2e8f0; flex-wrap: wrap;
-        }
-        .profile-header img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
-        .profile-header .profile-id { font-weight: 600; color: #1f2b3d; font-size: 0.9rem; }
+        td input { width: 55px; padding: 0.2rem; text-align: center; border: 1px solid #ccd8e8; border-radius: 0.3rem; }
+        .note { font-size: 0.7rem; color: #475569; margin-top: 0.3rem; }
+        .irr-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.6rem; padding: 0.6rem; margin-top: 0.6rem; }
+        .result-item { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px dashed #e2e8f0; }
+        .highlight { font-size: 1.3rem; font-weight: 700; color: #0047ab; background: #e8f0fe; padding: 0.1rem 0.5rem; border-radius: 0.8rem; }
+        .strategy-note { background: #fefce8; border: 1px solid #fde047; padding: 0.4rem; margin-top: 0.4rem; border-radius: 0.4rem; font-size: 0.7rem; }
+        .activation-box { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 0.6rem; padding: 0.8rem; margin-top: 0.8rem; }
+        .profile-header { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0; margin-bottom: 0.8rem; border-bottom: 1px solid #e2e8f0; }
+        .profile-header img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+        .profile-header .profile-id { font-weight: 600; color: #1f2b3d; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 <div class="app-container">
     <div class="steps-nav" id="stepsNav">
-        <div class="step-item active" data-step="1"><div class="step-circle">1</div><div class="step-label">现状基本情况</div></div>
-        <div class="step-item" data-step="2"><div class="step-circle">2</div><div class="step-label">未来预测参数</div></div>
+        <div class="step-item active" data-step="1"><div class="step-circle">1</div><div class="step-label">现状情况</div></div>
+        <div class="step-item" data-step="2"><div class="step-circle">2</div><div class="step-label">预测参数</div></div>
         <div class="step-item" data-step="3"><div class="step-circle">3</div><div class="step-label">计算结果</div></div>
-        <div class="step-item" data-step="4" class="locked"><div class="step-circle">4</div><div class="step-label">分年度预测</div></div>
-        <div class="step-item" data-step="5" class="locked"><div class="step-circle">5</div><div class="step-label">多策略对比</div></div>
+        <div class="step-item locked" data-step="4"><div class="step-circle">4</div><div class="step-label">分年预测</div></div>
+        <div class="step-item locked" data-step="5"><div class="step-circle">5</div><div class="step-label">策略对比</div></div>
     </div>
 
     <div class="content-area" id="contentArea">
-        <!-- 页眉 -->
         <div class="profile-header">
             <img src="https://sns-avatar-qc.xhscdn.com/avatar/seller_6a09bfc78b35500001440284?imageView2/2/w/540/format/webp|imageMogr2/strip2" alt="头像">
             <span class="profile-id">小红书：@养老规划手记</span>
         </div>
 
-        <!-- 步骤1 -->
+        <!-- 步骤1：现状基本情况 -->
         <div class="step-content active" data-step="1">
             <div class="step-title">📋 现状基本情况</div>
             <div class="form-grid">
-                <div class="field"><label>🎂 出生日期</label><input type="date" id="birthDate" value="1991-07-25"></div>
+                <div class="field"><label>🎂 出生日期</label><input type="date" id="birthDate" value="1990-01-01"></div>
                 <div class="field"><label>⚧ 性别/身份</label>
                     <select id="genderType"><option value="male">男性</option><option value="femaleCadre">女干部/灵活就业</option><option value="femaleWorker" selected>女工人</option></select>
                 </div>
-                <div class="field"><label>💼 参加工作时间</label><input type="date" id="startWorkDate" value="2014-08-01"></div>
+                <div class="field"><label>💼 参加工作时间</label><input type="date" id="startWorkDate" value="2010-01-01"></div>
                 <div class="field"><label>📈 上一年社平工资(年总额)</label><input type="number" id="currentSocialAvg" value="143244"></div>
-                <div class="field"><label>💰 当前个人账户储存额</label><input type="number" id="currentAccount" value="112623.53"></div>
+                <div class="field"><label>💰 当前个人账户储存额</label><input type="number" id="currentAccount" value="0" step="0.01"></div>
                 <div class="field"><label>📊 现状平均缴费指数 (Z实指数)</label>
-                    <div style="display:flex; gap:0.4rem;">
+                    <div style="display:flex; gap:0.3rem;">
                         <input type="number" id="avgIndex" value="1.0" step="0.01" style="flex:1;">
                         <button type="button" id="showZTableBtn" class="btn-secondary">📋 详细</button>
                     </div>
                 </div>
                 <div class="field"><label>🧾 历史已自费缴纳社保总额 (元)</label><input type="number" id="totalHistoryPaid" value="0" step="0.01"></div>
             </div>
-            <div id="zIndexSection" style="margin-top: 1.5rem; display: none;">
+            <div id="zIndexSection" style="margin-top: 1rem; display: none;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="font-size:1rem;">Z实指数详细计算（截至当前）</h3>
+                    <h3 style="font-size:0.95rem;">Z实指数详细计算（截至当前）</h3>
                     <button id="toggleZTableBtn" class="btn-small">收起表格</button>
                 </div>
                 <div id="zTableWrapper"><div class="table-wrapper"><table id="zIndexTable"><thead><tr><th>年份</th><th>上一年社平</th><th>应缴月数</th><th>实缴月数</th><th>年缴费基数</th><th>指数</th></tr></thead><tbody></tbody></table></div></div>
-                <div style="margin-top:0.5rem;">现状平均缴费指数 = <span id="computedZIndex">0.0000</span> <button id="applyZIndexBtn" class="btn-small">✅ 采用</button></div>
+                <div style="margin-top:0.4rem;">现状平均缴费指数 = <span id="computedZIndex">0.0000</span> <button id="applyZIndexBtn" class="btn-small">✅ 采用</button></div>
             </div>
         </div>
 
-        <!-- 步骤2 -->
+        <!-- 步骤2：未来预测参数 -->
         <div class="step-content" data-step="2">
             <div class="step-title">🔮 未来预测参数</div>
             <div class="form-grid">
-                <div class="field"><label>🧓 预计退休日期 <span style="font-size:0.7rem;color:#16a34a;">自动</span></label><input type="date" id="retireDate" readonly></div>
-                <div class="field"><label>📌 退休年龄 <span style="font-size:0.7rem;color:#16a34a;">自动</span></label><input type="text" id="retireAgeDisplay" readonly></div>
+                <div class="field"><label>🧓 预计退休日期 <span style="font-size:0.65rem;">自动</span></label><input type="date" id="retireDate" readonly></div>
+                <div class="field"><label>📌 退休年龄 <span style="font-size:0.65rem;">自动</span></label><input type="text" id="retireAgeDisplay" readonly></div>
                 <div class="field"><label>📊 退休时预计社平(年缴存额)</label><input type="text" id="predictedSocialAvg" readonly style="background:#fff7ed;"></div>
                 <div class="field"><label>🌱 社平工资年增长率 (%)</label><input type="number" id="wageGrowth" value="2.0"></div>
                 <div class="field"><label>📈 个人账户记账利率 (%)</label><input type="number" id="interestRate" value="1.8"></div>
@@ -109,32 +105,50 @@
                 <div class="field"><label>🎯 预期寿命 (岁)</label><input type="number" id="lifeExpectancy" value="80" step="1"></div>
                 <div class="field"><label>📉 资金折现率 (%)</label><input type="number" id="discountRate" value="2.5" step="0.1"></div>
             </div>
-            <div style="margin-top:1rem;">
-                <button id="goToResultsBtn" class="btn" style="width:100%;">📈 计算并查看结果</button>
-            </div>
+            <button id="goToResultsBtn" class="btn" style="margin-top:0.8rem; width:100%;">📈 计算并查看结果</button>
         </div>
 
-        <!-- 步骤3 -->
+        <!-- 步骤3：计算结果 -->
         <div class="step-content" data-step="3">
             <div class="step-title">📊 计算结果</div>
             <div id="resultContainer" class="result-card" style="display: none;"></div>
-            <button id="recalcBtn" class="btn" style="margin-top:1rem;">🔄 重新计算</button>
+            <button id="recalcBtn" class="btn" style="margin-top:0.6rem; width:100%;">🔄 重新计算</button>
 
             <div id="activationBox" class="activation-box" style="display:none;">
                 <strong>🔒 解锁高级功能（分年度预测 & 多策略对比）</strong>
-                <p style="font-size:0.8rem;">1. 点击下方按钮获取你的设备指纹，发送给管理员获取激活码。</p>
-                <p style="font-size:0.8rem;">2. 输入激活码后解锁高级功能（永久有效，仅限本设备）。</p>
-                <button id="fingerprintBtn" class="btn-secondary" style="margin-top:0.5rem;">📱 显示设备指纹</button>
-                <div id="fingerprintDisplay" style="margin:0.3rem 0; font-family:monospace; font-size:0.9rem; word-break:break-all;"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                    <input type="text" id="activationCode" placeholder="请输入8位激活码" style="flex:1; padding:0.4rem; border:1px solid #ccc; border-radius:0.5rem;">
+                <p style="font-size:0.8rem; margin-top:0.3rem;">💰 完整版：<strong>￥6.99</strong>（永久解锁，仅限本设备）</p>
+                <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin:0.8rem 0;">
+                    <div style="text-align:center;">
+                        <img src="https://s3.uuu.ovh/2026/05/25/bQ1n9MCR.jpg" alt="微信支付" style="width:140px; height:140px; border:1px solid #ddd; border-radius:0.5rem; object-fit:contain;">
+                        <div style="font-size:0.7rem; color:#666; margin-top:0.2rem;">微信扫码支付</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <img src="https://s3.uuu.ovh/2026/05/25/qTCsm4Vk.jpg" alt="支付宝" style="width:140px; height:140px; border:1px solid #ddd; border-radius:0.5rem; object-fit:contain;">
+                        <div style="font-size:0.7rem; color:#666; margin-top:0.2rem;">支付宝扫码支付</div>
+                    </div>
+                </div>
+                <div style="background:#fff; padding:0.5rem; border-radius:0.5rem; margin:0.5rem 0; font-size:0.75rem;">
+                    <strong>📊 完整版包含功能：</strong><br>
+                    ✅ 分年度社保缴费预测<br>
+                    ✅ 多策略对比计算<br>
+                    ✅ 累计缴费年限动态提醒<br>
+                    ✅ IRR与回本周期分析<br>
+                    ✅ 资金折现率与现值计算<br>
+                    ✅ 断缴/停缴模拟
+                </div>
+                <p style="font-size:0.75rem; background:#fffbe6; padding:0.4rem; border-radius:0.4rem; border:1px solid #fde68a;">
+                    📱 <strong>付款后，请将截图发送至小红书：@养老规划手记</strong><br>
+                    ⏱ 24小时内通过私信发送激活码
+                </p>
+                <div style="display:flex; gap:0.4rem; margin-top:0.5rem;">
+                    <input type="text" id="activationCode" placeholder="请输入8位激活码" style="flex:1; padding:0.35rem; border:1px solid #ccc; border-radius:0.4rem;">
                     <button id="activateBtn" class="btn-small">激活</button>
                 </div>
-                <div id="activateMsg" style="font-size:0.75rem; color:red; margin-top:0.3rem;"></div>
+                <div id="activateMsg" style="font-size:0.7rem; color:red; margin-top:0.2rem;"></div>
             </div>
         </div>
 
-        <!-- 步骤4 -->
+        <!-- 步骤4：分年度预测 -->
         <div class="step-content" data-step="4">
             <div class="step-title">📈 分年度社保缴费预测</div>
             <div class="table-wrapper">
@@ -143,23 +157,21 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="note">* 可编辑实缴月数和档位，自动更新计算结果。累计月数包含历史缴费月数（参加工作至当前）。</div>
-            <button id="resetRatiosBtn" class="btn-secondary" style="margin-top:0.5rem;">🔄 重置为全局档位</button>
+            <div class="note">* 可编辑实缴月数和档位，自动更新计算结果。累计月数包含历史缴费月数。</div>
+            <button id="resetRatiosBtn" class="btn-secondary" style="margin-top:0.4rem;">🔄 重置为全局档位</button>
         </div>
 
-        <!-- 步骤5 -->
+        <!-- 步骤5：多策略对比 -->
         <div class="step-content" data-step="5">
             <div class="step-title">📊 多策略对比计算</div>
-            <div class="form-grid">
-                <div class="field"><label>🎯 目标退休时Z实指数</label><input type="number" id="targetZIndex" value="1.0" step="0.01"></div>
-            </div>
-            <button id="strategyBtn" class="btn" style="margin-top:1rem; width:100%;">📊 计算目标策略对比</button>
-            <div id="strategyCompareSection" style="margin-top:1rem; display: none;">
-                <h3 style="font-size:1rem;">策略对比</h3>
+            <div class="form-grid"><div class="field"><label>🎯 目标退休时Z实指数</label><input type="number" id="targetZIndex" value="1.0" step="0.01"></div></div>
+            <button id="strategyBtn" class="btn" style="margin-top:0.6rem; width:100%;">📊 计算目标策略对比</button>
+            <div id="strategyCompareSection" style="margin-top:0.6rem; display: none;">
+                <h3 style="font-size:0.9rem;">策略对比</h3>
                 <div class="table-wrapper">
                     <table id="strategyCompareTable"><thead><tr><th>策略</th><th>描述</th><th>总缴费(名义)</th><th>总缴费(现值)</th><th>退休时Z指数</th><th>每月养老金</th><th>IRR</th><th>操作</th></tr></thead><tbody></tbody></table>
                 </div>
-                <div class="strategy-note">💡 最低成本策略以满足最低缴费年限后停缴为目标，不再追求目标Z实指数。其他策略仍以目标Z实指数为优化目标。</div>
+                <div class="strategy-note">💡 最低成本策略以满足最低缴费年限后停缴为目标。</div>
             </div>
         </div>
 
@@ -172,8 +184,13 @@
 
 <script>
     (() => {
-        // 养老金计算核心
+        // 常量
         const pmap = {40:233,41:230,42:226,43:223,44:220,45:216,46:212,47:208,48:204,49:199,50:195,51:190,52:185,53:180,54:175,55:170,56:164,57:158,58:152,59:145,60:139,61:132,62:125,63:117,64:109,65:101,66:93,67:84,68:75,69:65,70:56};
+        const socialHist = {1992:2877,1993:3402,1994:4523,1995:6540,1996:8144,1997:9579,1998:11019,1999:12285,2000:13778,2001:15726,2002:18092,2003:20728,2004:24045,2005:28348,2006:32808,2007:36097,2008:39867,2009:44715,2010:48444,2011:50415,2012:56061,2013:62677,2014:69521,2015:77560,2016:85038,2017:92477,2018:101599,2019:94258,2020:106168,2021:112668,2022:127535,2023:135567,2024:141133,2025:143244};
+        const SECRET_KEY = "MySecret2025@Pension";
+        const ACTIVATION_STORAGE = 'pension_calc_activated';
+
+        // 工具函数
         const getPayout = a => { const f=Math.floor(a); if(f<=40) return 233; if(f>=70) return 56; return pmap[f]||Math.round(pmap[f]+(pmap[Math.ceil(a)]-pmap[f])*(a-f)); };
         const delayRetire = (birth, gender) => {
             let orig, step, target;
@@ -194,12 +211,10 @@
             const extraYears = Math.min(retireYear - 2029, 10);
             return 180 + extraYears * 6;
         };
-        const socialHist = {1992:2877,1993:3402,1994:4523,1995:6540,1996:8144,1997:9579,1998:11019,1999:12285,2000:13778,2001:15726,2002:18092,2003:20728,2004:24045,2005:28348,2006:32808,2007:36097,2008:39867,2009:44715,2010:48444,2011:50415,2012:56061,2013:62677,2014:69521,2015:77560,2016:85038,2017:92477,2018:101599,2019:94258,2020:106168,2021:112668,2022:127535,2023:135567,2024:141133,2025:143244};
         const getPrevSocial = y => y <= 2025 && socialHist[y] ? socialHist[y] : (socialHist[2025]||143244) * Math.pow(1 + (parseFloat(document.getElementById('wageGrowth').value)||2)/100, y-2025);
         const fmtDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
         const money = v => v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
         const toYearMonth = m => `${Math.floor(m/12)}年${m%12}月`;
-
         const calcHistoricalMonths = () => {
             const start = new Date(document.getElementById('startWorkDate').value);
             const now = new Date();
@@ -215,6 +230,7 @@
             return months;
         };
 
+        // DOM元素
         const els = {
             birth: document.getElementById('birthDate'), gender: document.getElementById('genderType'),
             retireDate: document.getElementById('retireDate'), retireAge: document.getElementById('retireAgeDisplay'),
@@ -229,9 +245,11 @@
             strategySection: document.getElementById('strategyCompareSection'),
             strategyBody: document.querySelector('#strategyCompareTable tbody'),
             targetZ: document.getElementById('targetZIndex'),
-            discount: document.getElementById('discountRate')
+            discount: document.getElementById('discountRate'),
+            startWorkDate: document.getElementById('startWorkDate')
         };
 
+        // 退休日期联动
         const updatePred = () => { if(els.retireDate.value) els.predicted.value = money(getPrevSocial(new Date(els.retireDate.value).getFullYear()-1))+' 元/年'; };
         const updateRetire = () => { if(els.birth.value){ const r=delayRetire(new Date(els.birth.value), els.gender.value); els.retireDate.value=fmtDate(r.date); els.retireAge.value=r.age.toFixed(1)+' 岁'; updatePred(); }};
         els.birth.addEventListener('change',updateRetire); els.gender.addEventListener('change',updateRetire);
@@ -239,6 +257,7 @@
         els.retireDate.addEventListener('dblclick',function(){this.removeAttribute('readonly');});
         els.retireDate.addEventListener('blur',function(){ if(this.value && els.birth.value) { els.retireAge.value = ((new Date(this.value)-new Date(els.birth.value))/(365.25*86400000)).toFixed(1)+' 岁 (手动)'; updatePred(); } this.setAttribute('readonly',true); });
 
+        // 核心计算
         const getFutureYearsInfo = () => {
             const curYear = new Date().getFullYear();
             const retYear = new Date(els.retireDate.value).getFullYear();
@@ -252,7 +271,7 @@
         };
 
         const computeStrategy = (ratios, actualMonths) => {
-            const birth = new Date(els.birth.value), start = new Date(document.getElementById('startWorkDate').value);
+            const birth = new Date(els.birth.value), start = new Date(els.startWorkDate.value);
             const retire = new Date(els.retireDate.value);
             const curAccount = parseFloat(els.curAccount.value)||0;
             const ir = parseFloat(els.interest.value)||1.8;
@@ -263,8 +282,7 @@
             const discountRate = parseFloat(els.discount.value)||0;
 
             const histMonths = calcHistoricalMonths();
-            let cumPension = histMonths;
-            let cumMedical = histMonths;
+            let cumPension = histMonths, cumMedical = histMonths;
             const gender = els.gender.value;
             const medicalTarget = (gender==='male'?300:240);
 
@@ -283,20 +301,15 @@
             const futureDueMonthsTotal = futureInfo.reduce((s, f) => s + f.dueMonths, 0);
             const totalDueMonths = histDueMonths + futureDueMonthsTotal;
             const totalDueYears = totalDueMonths / 12;
-
             const histDueYears = histDueMonths / 12;
             let futureIndexSum = 0;
             const futureRows = [];
-            let balance = curAccount;
-            let totalFlex = 0, presentValue = 0;
+            let balance = curAccount, totalFlex = 0, presentValue = 0;
 
             for (let i = 0; i < futureInfo.length; i++) {
                 const fi = futureInfo[i];
-                const y = fi.year;
-                const ratio = ratios[i];
-                const actualMon = Math.min(actualMonths[i], fi.dueMonths);
-                const dueMonths = fi.dueMonths;
-                const social = fi.social;
+                const y = fi.year, ratio = ratios[i], actualMon = Math.min(actualMonths[i], fi.dueMonths);
+                const dueMonths = fi.dueMonths, social = fi.social;
                 const monthBase = actualMon > 0 ? (social/12) * ratio : 0;
                 const annualBase = actualMon > 0 ? social * ratio : 0;
                 const pensionY = annualBase * 0.20 * (actualMon/12);
@@ -304,9 +317,7 @@
                 const medY = actualMon > 0 ? (584.92*12) * Math.pow(1.02, y-2025) * (actualMon/12) : 0;
                 const flex = pensionY + unempY + medY;
                 balance = balance * (1 + ir/100) + monthBase * 0.08 * actualMon;
-                totalFlex += flex;
-                cumPension += actualMon;
-                cumMedical += actualMon;
+                totalFlex += flex; cumPension += actualMon; cumMedical += actualMon;
                 presentValue += flex / Math.pow(1 + discountRate/100, i);
                 const indexContrib = dueMonths > 0 ? ratio * (actualMon / dueMonths) : 0;
                 futureIndexSum += indexContrib;
@@ -314,18 +325,16 @@
             }
 
             const retireZIndex = (fixedAvgIndex * histDueYears + futureIndexSum) / totalDueYears;
-            const retPrevSocial = getPrevSocial(retYear-1);
-            const retPrevMonth = retPrevSocial/12;
+            const retPrevSocial = getPrevSocial(retYear-1), retPrevMonth = retPrevSocial/12;
             const actualYears = cumPension / 12;
             const basePension = (retPrevMonth + retPrevMonth * retireZIndex) / 2 * actualYears * 0.01;
-
             const finalBalance = balance;
             const retireAge = (retire - birth)/(365.25*86400000);
             const monthsPay = getPayout(retireAge);
             const personalPen = finalBalance / monthsPay;
             const totalMonthly = basePension + personalPen;
 
-            const histYearsInt = getFutureYearsInfo().length > 0 ? (curYear - startDate.getFullYear()) : 0;
+            const histYearsInt = futureInfo.length > 0 ? (curYear - startDate.getFullYear()) : 0;
             const histAnnual = histYearsInt > 0 ? historyPaid / histYearsInt : 0;
             const futureMap = Object.fromEntries(futureRows.map(r => [r.y, r.flex]));
             const flows = [];
@@ -370,7 +379,6 @@
             const irrStr = res.irr !== null ? (res.irr*100).toFixed(2)+'%' : '无法计算';
             const minPension = getMinPensionMonths(retire.getFullYear());
             const medicalTarget = (els.gender.value==='male'?300:240);
-
             els.result.innerHTML = `
                 <div style="display:flex; justify-content:space-between; margin-bottom:0.8rem;">
                     <span>📅 退休时间</span><span>${retire.getFullYear()}年${retire.getMonth()+1}月</span>
@@ -398,125 +406,99 @@
         };
 
         const renderFutureTable = (rows) => {
-            let html = '';
             const minPensionMonths = getMinPensionMonths(new Date(els.retireDate.value).getFullYear());
             const medicalTarget = (els.gender.value==='male'?300:240);
-            let flexSum = 0;
+            let flexSum = 0, html = '';
             rows.forEach(r => {
                 flexSum += r.flex;
                 const pIcon = r.cumPension >= minPensionMonths ? '✅' : '';
                 const mIcon = r.cumMedical >= medicalTarget ? '✅' : '';
-                html += `<tr>
-                    <td>${r.y}</td><td>${money(r.social)}</td><td>${r.dueMonths}</td>
+                html += `<tr><td>${r.y}</td><td>${money(r.social)}</td><td>${r.dueMonths}</td>
                     <td><input class="month-input" data-year="${r.y}" value="${r.actMonths}" type="number" min="0" max="${r.dueMonths}" step="1"></td>
                     <td><input class="ratio-input" data-year="${r.y}" value="${r.ratio.toFixed(4)}" step="0.1" min="0.6" max="3.0" type="number"></td>
                     <td>${money(r.annualBase)}</td><td>${money(r.flex)}</td><td>${money(r.balance)}</td>
-                    <td>${toYearMonth(r.cumPension)} ${pIcon}</td><td>${toYearMonth(r.cumMedical)} ${mIcon}</td>
-                </tr>`;
+                    <td>${toYearMonth(r.cumPension)} ${pIcon}</td><td>${toYearMonth(r.cumMedical)} ${mIcon}</td></tr>`;
             });
             const last = rows[rows.length-1];
             html += `<tr style="font-weight:700; background:#f0f4fc;">
                 <td colspan="6">合计</td><td>${money(flexSum)}</td>
                 <td>${money(last.balance)}</td>
                 <td>${toYearMonth(last.cumPension)} ${last.cumPension>=minPensionMonths?'✅满足':'❌不足'}</td>
-                <td>${toYearMonth(last.cumMedical)} ${last.cumMedical>=medicalTarget?'✅达标':'⚠️不足'}</td>
-            </tr>`;
+                <td>${toYearMonth(last.cumMedical)} ${last.cumMedical>=medicalTarget?'✅达标':'⚠️不足'}</td></tr>`;
             els.futureBody.innerHTML = html;
-
-            document.querySelectorAll('#futureTable input.month-input').forEach(inp => {
-                inp.addEventListener('change', () => { const v = parseInt(inp.value); if (isNaN(v) || v<0) inp.value=0; if (v>12) inp.value=12; calculateAll(); });
-            });
-            document.querySelectorAll('#futureTable input.ratio-input').forEach(inp => {
-                inp.addEventListener('change', () => { const v = parseFloat(inp.value); if (isNaN(v) || v<0.6) inp.value=0.6; if (v>3.0) inp.value=3.0; els.ratio.value = parseFloat(inp.value).toFixed(4); calculateAll(); });
-            });
+            document.querySelectorAll('#futureTable input.month-input').forEach(inp => inp.addEventListener('change', () => { const v=parseInt(inp.value); if(isNaN(v)||v<0) inp.value=0; if(v>12) inp.value=12; calculateAll(); }));
+            document.querySelectorAll('#futureTable input.ratio-input').forEach(inp => inp.addEventListener('change', () => { const v=parseFloat(inp.value); if(isNaN(v)||v<0.6) inp.value=0.6; if(v>3.0) inp.value=3.0; els.ratio.value=parseFloat(inp.value).toFixed(4); calculateAll(); }));
         };
 
         const generateStrategies = () => {
             const futureInfo = getFutureYearsInfo();
             const nFuture = futureInfo.length;
             const gender = els.gender.value;
-            const medicalTarget = (gender === 'male' ? 300 : 240);
+            const medicalTarget = (gender==='male'?300:240);
             const retireYear = new Date(els.retireDate.value).getFullYear();
             const minPensionReq = getMinPensionMonths(retireYear);
             const histMonths = calcHistoricalMonths();
-            const neededPension = Math.max(0, minPensionReq - histMonths);
-            const neededMedical = Math.max(0, medicalTarget - histMonths);
-            const neededTotal = Math.max(neededPension, neededMedical);
-
+            const neededTotal = Math.max(0, Math.max(minPensionReq, medicalTarget) - histMonths);
             const baseMonths = futureInfo.map(() => 0);
             const baseRatios = futureInfo.map(() => 0.6);
             let remaining = neededTotal;
-            for (let i = nFuture - 1; i >= 0 && remaining > 0; i--) {
-                const due = futureInfo[i].dueMonths;
-                const take = Math.min(due, remaining);
-                baseMonths[i] = take;
-                remaining -= take;
-            }
+            for (let i=nFuture-1; i>=0 && remaining>0; i--) { const due=futureInfo[i].dueMonths; const take=Math.min(due,remaining); baseMonths[i]=take; remaining-=take; }
 
-            const targetZ = parseFloat(els.targetZ.value) || 1.0;
-            const currentZ = parseFloat(els.avgIndex.value) || 1.0;
-            const histDueYears = calcHistoricalMonths() / 12;
+            const targetZ = parseFloat(els.targetZ.value)||1.0;
+            const currentZ = parseFloat(els.avgIndex.value)||1.0;
+            const histDueYears = calcHistoricalMonths()/12;
             const totalDueYears = histDueYears + futureInfo.reduce((s,f)=>s+f.dueMonths,0)/12;
-            const neededFutureSum = targetZ * totalDueYears - currentZ * histDueYears;
-            if (neededFutureSum < 0) { alert('目标Z指数过低'); return; }
-            if (neededFutureSum > nFuture * 3.0) { alert('目标Z指数过高'); return; }
+            const neededFutureSum = targetZ*totalDueYears - currentZ*histDueYears;
+            if (neededFutureSum<0) { alert('目标Z指数过低'); return; }
+            if (neededFutureSum > nFuture*3.0) { alert('目标Z指数过高'); return; }
 
-            const fullMonths = futureInfo.map(f => f.dueMonths);
-            const strategyB = Array(nFuture).fill(0.6);
-            const strategyC = Array(nFuture).fill(0.6);
-            const strategyD = Array(nFuture).fill(0.6);
-            const half = Math.floor(nFuture / 2);
-            const neededAvg = neededFutureSum / nFuture;
-            if (neededAvg > 0.6) {
-                const highB = (neededAvg * nFuture - 0.6 * half) / (nFuture - half);
-                for (let i = half; i < nFuture; i++) strategyB[i] = Math.min(3.0, highB);
-                const highC = (neededAvg * nFuture - 0.6 * (nFuture - half)) / half;
-                for (let i = 0; i < half && i < nFuture; i++) strategyC[i] = Math.min(3.0, highC);
+            const fullMonths = futureInfo.map(f=>f.dueMonths);
+            const half = Math.floor(nFuture/2);
+            const neededAvg = neededFutureSum/nFuture;
+            const strategyB=Array(nFuture).fill(0.6), strategyC=Array(nFuture).fill(0.6), strategyD=Array(nFuture).fill(0.6);
+            if (neededAvg>0.6) {
+                const highB=(neededAvg*nFuture-0.6*half)/(nFuture-half);
+                for (let i=half; i<nFuture; i++) strategyB[i]=Math.min(3.0,highB);
+                const highC=(neededAvg*nFuture-0.6*(nFuture-half))/half;
+                for (let i=0; i<half && i<nFuture; i++) strategyC[i]=Math.min(3.0,highC);
             }
-            strategyD.fill(Math.min(3.0, neededAvg));
-
+            strategyD.fill(Math.min(3.0,neededAvg));
             const strategies = [
-                { name: '最低成本', desc: '满足最低年限后停缴', ratios: baseRatios, months: baseMonths },
-                { name: '先低后高', desc: '前半段0.6后半段升', ratios: strategyB, months: fullMonths },
-                { name: '先高后低', desc: '前半段升后半段0.6', ratios: strategyC, months: fullMonths },
-                { name: '均匀缴费', desc: '档位相同', ratios: strategyD, months: fullMonths }
+                { name:'最低成本', desc:'满足最低年限后停缴', ratios:baseRatios, months:baseMonths },
+                { name:'先低后高', desc:'前半段0.6后半段升', ratios:strategyB, months:fullMonths },
+                { name:'先高后低', desc:'前半段升后半段0.6', ratios:strategyC, months:fullMonths },
+                { name:'均匀缴费', desc:'档位相同', ratios:strategyD, months:fullMonths }
             ];
-
-            const results = strategies.map(s => ({ ...s, res: computeStrategy(s.ratios, s.months) }));
-
-            let html = '';
-            results.forEach((s, idx) => {
-                const r = s.res;
-                html += `<tr>
-                    <td><strong>${s.name}</strong></td><td>${s.desc}</td><td>${money(r.totalFlex)}</td><td>${money(r.presentValue)}</td>
+            const results = strategies.map(s=>({ ...s, res:computeStrategy(s.ratios,s.months) }));
+            let html='';
+            results.forEach((s,idx)=>{
+                const r=s.res;
+                html+=`<tr><td><strong>${s.name}</strong></td><td>${s.desc}</td><td>${money(r.totalFlex)}</td><td>${money(r.presentValue)}</td>
                     <td>${r.retireZIndex.toFixed(4)}</td><td>${money(r.totalMonthly)}</td><td>${r.irr!==null?(r.irr*100).toFixed(2)+'%':'—'}</td>
-                    <td><button class="btn-small apply-strategy" data-index="${idx}">采用</button></td>
-                </tr>`;
+                    <td><button class="btn-small apply-strategy" data-index="${idx}">采用</button></td></tr>`;
             });
             els.strategyBody.innerHTML = html;
-            els.strategySection.style.display = 'block';
-
-            document.querySelectorAll('.apply-strategy').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const idx = parseInt(this.dataset.index);
-                    const s = results[idx];
-                    const curYear = new Date().getFullYear();
-                    s.ratios.forEach((ratio, i) => {
-                        const y = curYear + i;
-                        const inpR = document.querySelector(`#futureTable input.ratio-input[data-year="${y}"]`);
-                        if (inpR) inpR.value = ratio.toFixed(4);
-                        const inpM = document.querySelector(`#futureTable input.month-input[data-year="${y}"]`);
-                        if (inpM) inpM.value = s.months[i];
-                    });
-                    els.ratio.value = s.ratios[s.ratios.length - 1].toFixed(4);
-                    displayResults(s.res);
+            els.strategySection.style.display='block';
+            document.querySelectorAll('.apply-strategy').forEach(btn=>btn.addEventListener('click',function(){
+                const idx=parseInt(this.dataset.index);
+                const s=results[idx];
+                const curYear=new Date().getFullYear();
+                s.ratios.forEach((ratio,i)=>{
+                    const y=curYear+i;
+                    const inpR=document.querySelector(`#futureTable input.ratio-input[data-year="${y}"]`);
+                    if(inpR) inpR.value=ratio.toFixed(4);
+                    const inpM=document.querySelector(`#futureTable input.month-input[data-year="${y}"]`);
+                    if(inpM) inpM.value=s.months[i];
                 });
-            });
+                els.ratio.value=s.ratios[s.ratios.length-1].toFixed(4);
+                displayResults(s.res);
+            }));
         };
 
+        // Z实指数表格
         const renderZTable = () => {
-            const start = new Date(document.getElementById('startWorkDate').value);
-            if (!start) return;
+            const start = new Date(els.startWorkDate.value);
+            if (!start || isNaN(start.getTime())) return;
             const sy = start.getFullYear(), sm = start.getMonth()+1;
             const now = new Date(); const cy = now.getFullYear(), cm = now.getMonth()+1;
             let html = '';
@@ -534,8 +516,7 @@
             const updateZ = () => {
                 let sum=0, cnt=0;
                 document.querySelectorAll('#zIndexTable tbody tr').forEach(r => {
-                    const y = parseInt(r.dataset.year);
-                    const prev = socialHist[y-1]||1;
+                    const y = parseInt(r.dataset.year), prev = socialHist[y-1]||1;
                     const act = parseFloat(r.querySelector('.act').value)||0;
                     const base = parseFloat(r.querySelector('.base').value)||0;
                     const idx = act>0? base/prev : 0;
@@ -551,104 +532,36 @@
             document.getElementById('toggleZTableBtn').textContent = '收起表格';
         };
 
-        document.getElementById('showZTableBtn').addEventListener('click', renderZTable);
-        document.getElementById('toggleZTableBtn').addEventListener('click', function() {
-            const isHidden = els.zWrapper.style.display === 'none';
-            els.zWrapper.style.display = isHidden ? 'block' : 'none';
-            this.textContent = isHidden ? '收起表格' : '展开表格';
-        });
-        document.getElementById('applyZIndexBtn').addEventListener('click', ()=>{
-            const v=parseFloat(els.zResult.textContent);
-            if(!isNaN(v)){ els.avgIndex.value=v.toFixed(4); alert('已采用 '+v.toFixed(4)); }
-        });
-
-        document.getElementById('strategyBtn').addEventListener('click', generateStrategies);
-        document.getElementById('goToResultsBtn').addEventListener('click', () => { calculateAll(); goToStep(3); });
-        document.getElementById('recalcBtn').addEventListener('click', calculateAll);
-        document.getElementById('resetRatiosBtn').addEventListener('click', () => {
-            const g = parseFloat(els.ratio.value)||0.6;
-            document.querySelectorAll('#futureTable input.ratio-input').forEach(i => i.value = g.toFixed(4));
-            document.querySelectorAll('#futureTable input.month-input').forEach(i => i.value = 12);
-            calculateAll();
-        });
-
         // 设备指纹激活
-        const SECRET_KEY = "MySecret2025@Pension";
-        const ACTIVATION_STORAGE = 'pension_calc_activated';
-
         async function getDeviceFingerprint() {
-            const components = [
-                navigator.userAgent, navigator.language, screen.colorDepth,
-                screen.width + 'x' + screen.height, new Date().getTimezoneOffset(),
-                !!navigator.cookieEnabled, !!navigator.onLine
-            ];
+            const components = [navigator.userAgent, navigator.language, screen.colorDepth, screen.width+'x'+screen.height, new Date().getTimezoneOffset(), !!navigator.cookieEnabled, !!navigator.onLine];
             try {
-                const canvas = document.createElement('canvas');
-                canvas.width = 200; canvas.height = 50;
-                const ctx = canvas.getContext('2d');
-                ctx.textBaseline = 'top'; ctx.font = '14px Arial';
-                ctx.fillStyle = '#f60'; ctx.fillRect(125, 1, 62, 20);
-                ctx.fillStyle = '#069'; ctx.fillText('Device Fingerprint', 2, 15);
+                const canvas=document.createElement('canvas'); canvas.width=200; canvas.height=50;
+                const ctx=canvas.getContext('2d'); ctx.textBaseline='top'; ctx.font='14px Arial';
+                ctx.fillStyle='#f60'; ctx.fillRect(125,1,62,20); ctx.fillStyle='#069'; ctx.fillText('Device Fingerprint',2,15);
                 components.push(canvas.toDataURL());
-            } catch (e) { }
-            const raw = components.join('###');
-            let hash = 0;
-            for (let i = 0; i < raw.length; i++) {
-                hash = ((hash << 5) - hash) + raw.charCodeAt(i);
-                hash |= 0;
-            }
+            } catch(e) {}
+            const raw=components.join('###');
+            let hash=0; for(let i=0;i<raw.length;i++){ hash=((hash<<5)-hash)+raw.charCodeAt(i); hash|=0; }
             return Math.abs(hash).toString(16).toUpperCase();
         }
-
-        function generateCodeFromFingerprint(fingerprint) {
-            const input = fingerprint + SECRET_KEY;
-            let hash = 0;
-            for (let i = 0; i < input.length; i++) {
-                hash = ((hash << 5) - hash) + input.charCodeAt(i);
-                hash |= 0;
-            }
-            return Math.abs(hash).toString(16).toUpperCase().slice(0, 8);
+        function generateCodeFromFingerprint(fp) {
+            const input=fp+SECRET_KEY;
+            let hash=0; for(let i=0;i<input.length;i++){ hash=((hash<<5)-hash)+input.charCodeAt(i); hash|=0; }
+            return Math.abs(hash).toString(16).toUpperCase().slice(0,8);
         }
-
-        function isActivated() {
-            return localStorage.getItem(ACTIVATION_STORAGE) === '1';
-        }
-
-        function setActivated() {
-            localStorage.setItem(ACTIVATION_STORAGE, '1');
-        }
-
+        function isActivated() { return localStorage.getItem(ACTIVATION_STORAGE)==='1'; }
+        function setActivated() { localStorage.setItem(ACTIVATION_STORAGE,'1'); }
         function updateActivationUI() {
-            const activated = isActivated();
-            const box = document.getElementById('activationBox');
-            if (box) box.style.display = activated ? 'none' : 'block';
-            const stepItems = document.querySelectorAll('.step-item[data-step="4"], .step-item[data-step="5"]');
-            stepItems.forEach(el => {
-                el.style.opacity = activated ? '1' : '0.4';
-                el.style.pointerEvents = activated ? 'auto' : 'none';
+            const activated=isActivated();
+            const box=document.getElementById('activationBox');
+            if(box) box.style.display=activated?'none':'block';
+            document.querySelectorAll('.step-item[data-step="4"], .step-item[data-step="5"]').forEach(el=>{
+                el.style.opacity=activated?'1':'0.4'; el.style.pointerEvents=activated?'auto':'none';
             });
         }
 
-        document.getElementById('fingerprintBtn').addEventListener('click', async () => {
-            const fp = await getDeviceFingerprint();
-            document.getElementById('fingerprintDisplay').textContent = '你的设备指纹：' + fp;
-        });
-
-        document.getElementById('activateBtn').addEventListener('click', async () => {
-            const code = document.getElementById('activationCode').value.trim();
-            if (!code) return;
-            const fp = await getDeviceFingerprint();
-            const expectedCode = generateCodeFromFingerprint(fp);
-            if (code.toUpperCase() === expectedCode) {
-                setActivated();
-                document.getElementById('activateMsg').textContent = '激活成功！高级功能已解锁。';
-                updateActivationUI();
-            } else {
-                document.getElementById('activateMsg').textContent = '激活码错误，请检查输入或联系管理员。';
-            }
-        });
-
-        // 分步导航
+        // 导航逻辑
         let currentStep = 1;
         const totalSteps = 5;
         const stepContents = document.querySelectorAll('.step-content');
@@ -658,30 +571,67 @@
 
         function goToStep(step) {
             if (step < 1 || step > totalSteps) return;
-            if (step >= 4 && !isActivated()) {
-                alert('请先在步骤3解锁高级功能（输入激活码）');
-                step = 3;
-            }
+            if (step >= 4 && !isActivated()) { alert('请先在步骤3解锁高级功能'); step = 3; }
             currentStep = step;
             stepContents.forEach(c => c.classList.remove('active'));
             document.querySelector(`.step-content[data-step="${step}"]`).classList.add('active');
             stepItems.forEach(i => i.classList.remove('active'));
             document.querySelector(`.step-item[data-step="${step}"]`).classList.add('active');
-            prevBtn.disabled = (step === 1);
-            if (step === totalSteps) { nextBtn.style.display = 'none'; }
-            else { nextBtn.style.display = 'block'; nextBtn.textContent = '下一步 ▶'; }
+            if (prevBtn) prevBtn.disabled = (step === 1);
+            if (nextBtn) {
+                if (step === totalSteps) { nextBtn.style.display = 'none'; }
+                else { nextBtn.style.display = 'block'; nextBtn.textContent = '下一步 ▶'; }
+            }
         }
 
-        prevBtn.addEventListener('click', () => goToStep(currentStep - 1));
-        nextBtn.addEventListener('click', () => goToStep(currentStep + 1));
-        stepItems.forEach(item => item.addEventListener('click', () => goToStep(parseInt(item.dataset.step))));
-
-        window.addEventListener('DOMContentLoaded', ()=>{
+        // 所有事件绑定集中在此
+        document.addEventListener('DOMContentLoaded', () => {
             updateRetire();
             renderZTable();
             calculateAll();
             updateActivationUI();
             goToStep(1);
+
+            document.getElementById('showZTableBtn')?.addEventListener('click', renderZTable);
+            document.getElementById('toggleZTableBtn')?.addEventListener('click', () => {
+                const wrapper = document.getElementById('zTableWrapper');
+                if (!wrapper) return;
+                const isHidden = wrapper.style.display === 'none';
+                wrapper.style.display = isHidden ? 'block' : 'none';
+                document.getElementById('toggleZTableBtn').textContent = isHidden ? '收起表格' : '展开表格';
+            });
+            document.getElementById('applyZIndexBtn')?.addEventListener('click', ()=>{
+                const v=parseFloat(els.zResult.textContent);
+                if(!isNaN(v)){ els.avgIndex.value=v.toFixed(4); alert('已采用 '+v.toFixed(4)); }
+            });
+            els.startWorkDate.addEventListener('change', () => { if (els.zSection.style.display !== 'none') renderZTable(); });
+
+            document.getElementById('goToResultsBtn')?.addEventListener('click', () => { calculateAll(); goToStep(3); });
+            document.getElementById('recalcBtn')?.addEventListener('click', calculateAll);
+            document.getElementById('strategyBtn')?.addEventListener('click', generateStrategies);
+            document.getElementById('resetRatiosBtn')?.addEventListener('click', () => {
+                const g=parseFloat(els.ratio.value)||0.6;
+                document.querySelectorAll('#futureTable input.ratio-input').forEach(i=>i.value=g.toFixed(4));
+                document.querySelectorAll('#futureTable input.month-input').forEach(i=>i.value=12);
+                calculateAll();
+            });
+
+            document.getElementById('fingerprintBtn')?.addEventListener('click', async ()=>{ document.getElementById('fingerprintDisplay').textContent='设备指纹：'+await getDeviceFingerprint(); });
+            document.getElementById('activateBtn')?.addEventListener('click', async ()=>{
+                const code=document.getElementById('activationCode').value.trim();
+                if(!code) return;
+                if (code.toUpperCase()===generateCodeFromFingerprint(await getDeviceFingerprint())) {
+                    setActivated(); document.getElementById('activateMsg').textContent='激活成功！'; updateActivationUI();
+                } else document.getElementById('activateMsg').textContent='激活码错误';
+            });
+
+            // 导航事件
+            document.getElementById('stepsNav')?.addEventListener('click', (e) => {
+                const stepItem = e.target.closest('.step-item');
+                if (stepItem) { const step = parseInt(stepItem.dataset.step); if (!isNaN(step)) goToStep(step); }
+            });
+            prevBtn?.addEventListener('click', () => goToStep(currentStep - 1));
+            nextBtn?.addEventListener('click', () => goToStep(currentStep + 1));
         });
     })();
 </script>
